@@ -6,19 +6,25 @@ import "slick-carousel/slick/slick-theme.css";
 
 import { Button, Wrapper } from "@/components";
 
-const Hero = () => {
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 480);
+const Hero: React.FC = () => {
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 480);
-    };
+    // Ensure this only runs on the client-side
+    if (typeof window !== "undefined") {
+      const handleResize = () => {
+        setIsMobile(window.innerWidth < 480);
+      };
 
-    window.addEventListener("resize", handleResize);
+      window.addEventListener("resize", handleResize);
 
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+      // Initial check
+      handleResize();
+
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      };
+    }
   }, []);
 
   const data = [
@@ -70,7 +76,7 @@ const Hero = () => {
               <img
                 src={d.img}
                 alt={`Slide ${d.id}`}
-                className="w-full object-cover h-[700px]" 
+                className="w-full object-cover h-[700px]"
               />
             </div>
           ))}

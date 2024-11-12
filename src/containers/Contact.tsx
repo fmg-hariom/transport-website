@@ -1,12 +1,21 @@
 "use client";
 import React, { useState } from "react";
 import { contactSection } from "@/lib/content/contact";
-import { Wrapper } from "@/components";
+
 import { MailPlus, MapPinMinus, PhoneCall } from "lucide-react";
 
+// Define prop types for the ContactCard component
+interface ContactCardProps {
+  Icon: React.ComponentType<React.SVGProps<SVGSVGElement>> |any;
+  title: string;
+  description: string;
+  info: string;
+  iconColor: string;
+}
+
 // Memoized ContactCard component for static content
-const ContactCard = React.memo(
-  ({ icon: Icon, title, description, info, iconColor }) => (
+const ContactCard = React.memo<ContactCardProps>(
+  ({ Icon, title, description, info, iconColor }) => (
     <div className="max-w-sm w-full sm:w-auto rounded-lg overflow-hidden shadow-lg bg-white transform transition-transform hover:-translate-y-2 hover:shadow-xl">
       <div className="flex justify-center items-center py-6">
         <Icon className={`w-10 h-10 ${iconColor}`} />
@@ -25,13 +34,20 @@ const ContactCard = React.memo(
 );
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
+  // Define types for the form data
+  const [formData, setFormData] = useState<{
+    name: string;
+    email: string;
+    message: string;
+  }>({
     name: "",
     email: "",
     message: "",
   });
 
-  const handleInputChange = (e: { target: { name: any; value: any; }; }) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ): void => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -39,7 +55,7 @@ const Contact = () => {
     }));
   };
 
-  const handleSubmit = (e: { preventDefault: () => void; }) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     console.log("Form Data:", formData);
     // Add form submission logic here
@@ -49,30 +65,27 @@ const Contact = () => {
   const { subtitle, title, paragraphs, link } = contactSection;
 
   return (
-    <div
-      // id="contact"
-      className="max-w-4xl mx-auto text-center py-16 md:py-24 mb-20 md:mb-32"
-    >
+    <div className="max-w-4xl mx-auto text-center py-16 md:py-24 mb-20 md:mb-32">
       <h2 className="heading-secondary mb-8">Contact Us</h2>
 
       {/* Contact Cards */}
       <div className="flex flex-wrap justify-center gap-12 py-8">
         <ContactCard
-          icon={PhoneCall}
+          Icon={PhoneCall}
           title="Call Us"
           description="Talk to our support team"
           info="+91 9988776655"
           iconColor="text-green-600"
         />
         <ContactCard
-          icon={MailPlus}
+          Icon={MailPlus}
           title="Email Us"
           description="Send us an email"
           info="support@example.com"
           iconColor="text-red-500"
         />
         <ContactCard
-          icon={MapPinMinus}
+          Icon={MapPinMinus}
           title="Visit Us"
           description="Find our office location"
           info="Address Line 1, City, Country"
@@ -118,7 +131,7 @@ const Contact = () => {
                 <input
                   type="text"
                   name="name"
-                  value={formData.name}
+                  value={name}
                   onChange={handleInputChange}
                   placeholder="Your Name"
                   className="p-2 w-full rounded-md text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6"

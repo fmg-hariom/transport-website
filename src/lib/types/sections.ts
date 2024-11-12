@@ -1,4 +1,5 @@
 import {
+  CTAType,
   // CTAType,
   ExperienceType,
   FeaturedProjectType,
@@ -22,9 +23,9 @@ export interface HeroSectionType extends Section {
   tagline: string;
   description?: string;
   specialText?: string;
-  // cta?: CTAType & {
-  //   hideInDesktop?: boolean;
-  // };
+  cta?: CTAType & {
+    hideInDesktop?: boolean;
+  };
 }
 
 export interface AboutSectionType extends Section {
